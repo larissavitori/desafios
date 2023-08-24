@@ -1,0 +1,51 @@
+// Banco utilizado para resolução foi o MySQL.
+
+DROP SCHEMA IF EXISTS tecnico;
+CREATE SCHEMA tecnico;
+USE tecnico;
+
+CREATE TABLE CLIENTES (
+    NOME CHAR(50) NOT NULL UNIQUE,
+    CPF INT,
+	IDADE INT NOT NULL,
+    PRIMARY KEY (CPF)
+);
+CREATE TABLE TELEFONES (
+    CPF_CLIENTE INT,
+    DDD INT NOT NULL,
+    TELEFONE INT,
+    PRIMARY KEY (CPF_CLIENTE),
+   CONSTRAINT FOREIGN KEY (CPF_CLIENTE) REFERENCES CLIENTES (CPF)
+);
+
+INSERT INTO CLIENTES ( NOME, CPF , IDADE)
+ VALUES
+ (  'MONICA SANTOS', '00000', '22');
+
+INSERT INTO TELEFONES ( CPF_CLIENTE, DDD , TELEFONE)
+ VALUES
+ (  '82', '22', ''),
+ (  '58', '24', '1111111'),
+ (  '37', '26', '1222222'),
+ (  '46', '10', '1111111'),
+ ( '5800', '9', '1222212');
+
+
+ // questao 6
+SELECT NOME FROM tecnico.CLIENTES
+WHERE IDADE >= 22
+ORDER BY NOME ASC;
+
+ // questao 7
+SELECT c.NOME, COUNT(t.TELEFONE) AS quantidade
+from tecnico.CLIENTES c
+INNER JOIN tecnico.TELEFONES t ON c.CPF = t.CPF_CLIENTE
+WHERE t.TELEFONE >= 1
+GROUP BY c.NOME;
+
+// questao 8, como não foi pedido o campo sobrenome na criação do banco, fiz duas consultas.
+DELETE  from tecnico.CLIENTES
+WHERE NOME  like '%santos%;
+
+DELETE  from tecnico.CLIENTES
+WHERE SOBRENOME = 'santos';
